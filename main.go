@@ -43,14 +43,16 @@ type CeCase struct { // Our example struct, you can use "-" to ignore a field
 
 
 func main() {
-	filePath := flag.String("filePath", "", "xml file path of code enforcement data")
+	xmlPath := flag.String("xmlPath", "", "xml file path of code enforcement data")
+	ceOutPath := flag.String("ceOutPath", "", "csv file to write cases to")
+	//cmplOutPath := flag.String("cmplOutPath", "", "csv file to write complaints to")
 	flag.Usage = func() {
 		fmt.Fprintln(os.Stderr, "usage: dsd_ce [options]")
 		flag.PrintDefaults()
 	}
 	flag.Parse()
 
-	f, err := os.Open(*filePath)
+	f, err := os.Open(*xmlPath)
 	check(err)
 
 	codeEnforcement, err := opendsd.DecodeCodeEnforcementCases(f)
@@ -89,4 +91,10 @@ func main() {
 	check(err)
 
 	fmt.Print(string(csvContent))
+	// Write CSV
+	ceFile, err := os.OpenFile(*ceOutPath, os.O_RDWR|os.O_CREATE, os.ModePerm)
+	check(err)
+	defer ceFile.Close()
+	err = gocsv.MarshalFile(ceCases, ceFile)
+	check(err)
 }
