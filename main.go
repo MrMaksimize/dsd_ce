@@ -42,10 +42,18 @@ type CeCase struct { // Our example struct, you can use "-" to ignore a field
 }
 
 
+type CeComplaint struct { // Our example struct, you can use "-" to ignore a field
+    CaseID  string   `csv:"case_id"`
+        TypeID  string   `csv:"complaint_type_id"`
+	Type    string   `csv:"complaint_type"`
+}
+
+
+
 func main() {
 	xmlPath := flag.String("xmlPath", "", "xml file path of code enforcement data")
 	ceOutPath := flag.String("ceOutPath", "", "csv file to write cases to")
-	//cmplOutPath := flag.String("cmplOutPath", "", "csv file to write complaints to")
+	cmplOutPath := flag.String("cmplOutPath", "", "csv file to write complaints to")
 	flag.Usage = func() {
 		fmt.Fprintln(os.Stderr, "usage: dsd_ce [options]")
 		flag.PrintDefaults()
@@ -59,6 +67,7 @@ func main() {
 	check(err)
 
 	var ceCases []CeCase
+	var ceComplaints []CeComplaint
 	for _, c := range codeEnforcement.Cases {
 		ceCases = append(ceCases, CeCase{
 			ID:         c.ID,
@@ -85,16 +94,27 @@ func main() {
 			LastActionDueDate: c.LastActionDueDate,
 			RemedyMsg: c.RemedyMsg,
 		})
+		for _, compl := range c.Complaints {
+		    ceComplaints = append(ceComplaints, CeComplaint{
+			CaseID: c.ID,
+			TypeID: compl.TypeID,
+			Type: compl.Type,
+		    })
+		}
 	}
 
-	csvContent, err := gocsv.MarshalString(ceCases)
+	/*csvContent, err := gocsv.MarshalString(ceComplaints)
 	check(err)
-
-	fmt.Print(string(csvContent))
+	fmt.Print(string(csvContent))*/
 	// Write CSV
 	ceFile, err := os.OpenFile(*ceOutPath, os.O_RDWR|os.O_CREATE, os.ModePerm)
 	check(err)
+	cmplFile, err := os.OpenFile(*cmplOutPath, os.O_RDWR|os.O_CREATE, os.ModePerm)
+	check(err)
 	defer ceFile.Close()
+	defer cmplFile.Close()
 	err = gocsv.MarshalFile(ceCases, ceFile)
+	check(err)
+	err = gocsv.MarshalFile(ceComplaints, cmplFile)
 	check(err)
 }
