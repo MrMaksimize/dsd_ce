@@ -3,10 +3,10 @@ package main
 import (
 	"flag"
 	"fmt"
-	"log"
-	"os"
 	"github.com/gocarina/gocsv"
 	"github.com/scoutred/opendsd"
+	"log"
+	"os"
 )
 
 func check(e error) {
@@ -16,37 +16,34 @@ func check(e error) {
 }
 
 type CeCase struct { // Our example struct, you can use "-" to ignore a field
-	ID                       string      `csv:"case_id"`
-	APN                      string      `csv:"apn"`
-	StreetAddress            string      `csv:"street_address"`
-	CaseSource 		 string      `csv:"case_source"`
-	Description              string      `csv:"description"`
-	OpenDate                 string      `csv:"open_date"`
-        CloseDate                string      `csv:"close_date"`
-	CloseReason              string      `csv:"close_reason"`
-	CloseNote                string      `csv:"close_note"`
-	Lat                      float64     `csv:"latitude"`
-	Lon                      float64     `csv:"longitude"`
-	NAD83Northing            string      `csv:"nad83_northing"`
-	NAD83Easting             string      `csv:"nad83_easting"`
-	Workgroup                string      `csv:"workgroup"`
-	InvestigatorName         string      `csv:"investigator_name"`
-	InvestigatorPhoneNumber  string      `csv:"investigator_phone_number"`
-	InvestigatorEmailAddress string      `csv:"investigator_email_address"`
-	InvestigatorActive       string      `csv:"investigator_active"`
-	LastAction               string      `csv:"last_action"`
-	LastActionDueDate        string      `csv:"last_action_due_date"`
-	RemedyMsg                string      `csv:"remedy_msg"`
+	ID                       string  `csv:"case_id"`
+	APN                      string  `csv:"apn"`
+	StreetAddress            string  `csv:"street_address"`
+	CaseSource               string  `csv:"case_source"`
+	Description              string  `csv:"description"`
+	OpenDate                 string  `csv:"open_date"`
+	CloseDate                string  `csv:"close_date"`
+	CloseReason              string  `csv:"close_reason"`
+	CloseNote                string  `csv:"close_note"`
+	Lat                      float64 `csv:"latitude"`
+	Lon                      float64 `csv:"longitude"`
+	NAD83Northing            string  `csv:"nad83_northing"`
+	NAD83Easting             string  `csv:"nad83_easting"`
+	Workgroup                string  `csv:"workgroup"`
+	InvestigatorName         string  `csv:"investigator_name"`
+	InvestigatorPhoneNumber  string  `csv:"investigator_phone_number"`
+	InvestigatorEmailAddress string  `csv:"investigator_email_address"`
+	InvestigatorActive       string  `csv:"investigator_active"`
+	LastAction               string  `csv:"last_action"`
+	LastActionDueDate        string  `csv:"last_action_due_date"`
+	RemedyMsg                string  `csv:"remedy_msg"`
 }
-
 
 type CeComplaint struct { // Our example struct, you can use "-" to ignore a field
-    CaseID  string   `csv:"case_id"`
-        TypeID  string   `csv:"complaint_type_id"`
-	Type    string   `csv:"complaint_type"`
+	CaseID string `csv:"case_id"`
+	TypeID string `csv:"complaint_type_id"`
+	Type   string `csv:"complaint_type"`
 }
-
-
 
 func main() {
 	xmlPath := flag.String("xmlPath", "", "xml file path of code enforcement data")
@@ -68,34 +65,34 @@ func main() {
 	var ceComplaints []CeComplaint
 	for _, c := range codeEnforcement.Cases {
 		ceCases = append(ceCases, CeCase{
-			ID:         c.ID,
-			CaseSource: c.CaseSource,
-			Description: c.Description,
-			OpenDate: c.OpenDate,
-			CloseDate: c.CloseDate,
-			CloseReason: c.CloseReason,
-			CloseNote: c.CloseNote,
-			APN: c.APN,
-			StreetAddress: c.StreetAddress,
-			Lat: c.Lat,
-			Lon: c.Lon,
-			NAD83Northing: c.NAD83Northing,
-			NAD83Easting: c.NAD83Easting,
-			Workgroup: c.Workgroup,
-			InvestigatorName: c.InvestigatorName,
-			InvestigatorPhoneNumber: c.InvestigatorPhoneNumber,
+			ID:                       c.ID,
+			CaseSource:               c.CaseSource,
+			Description:              c.Description,
+			OpenDate:                 c.OpenDate,
+			CloseDate:                c.CloseDate,
+			CloseReason:              c.CloseReason,
+			CloseNote:                c.CloseNote,
+			APN:                      c.APN,
+			StreetAddress:            c.StreetAddress,
+			Lat:                      c.Lat,
+			Lon:                      c.Lon,
+			NAD83Northing:            c.NAD83Northing,
+			NAD83Easting:             c.NAD83Easting,
+			Workgroup:                c.Workgroup,
+			InvestigatorName:         c.InvestigatorName,
+			InvestigatorPhoneNumber:  c.InvestigatorPhoneNumber,
 			InvestigatorEmailAddress: c.InvestigatorEmailAddress,
-			InvestigatorActive: c.InvestigatorActive,
-			LastAction: c.LastAction,
-			LastActionDueDate: c.LastActionDueDate,
-			RemedyMsg: c.RemedyMsg,
+			InvestigatorActive:       c.InvestigatorActive,
+			LastAction:               c.LastAction,
+			LastActionDueDate:        c.LastActionDueDate,
+			RemedyMsg:                c.RemedyMsg,
 		})
 		for _, compl := range c.Complaints {
-		    ceComplaints = append(ceComplaints, CeComplaint{
-			CaseID: c.ID,
-			TypeID: compl.TypeID,
-			Type: compl.Type,
-		    })
+			ceComplaints = append(ceComplaints, CeComplaint{
+				CaseID: c.ID,
+				TypeID: compl.TypeID,
+				Type:   compl.Type,
+			})
 		}
 	}
 
