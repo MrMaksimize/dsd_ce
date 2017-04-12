@@ -107,9 +107,10 @@ func main() {
 	check(err)
 	fmt.Print(string(csvContent))*/
 	// Write CSV
-	ceFile, err := os.OpenFile(*ceOutPath, os.O_RDWR|os.O_CREATE, os.ModePerm)
+	mode := int(0777)
+	ceFile, err := os.OpenFile(*ceOutPath, os.O_RDWR|os.O_CREATE, os.FileMode(mode))
 	check(err)
-	cmplFile, err := os.OpenFile(*cmplOutPath, os.O_RDWR|os.O_CREATE, os.ModePerm)
+	cmplFile, err := os.OpenFile(*cmplOutPath, os.O_RDWR|os.O_CREATE, os.FileMode(mode))
 	check(err)
 	defer ceFile.Close()
 	defer cmplFile.Close()
