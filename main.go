@@ -1,4 +1,6 @@
-package main
+package dsd_ce
+
+// Convert from dsd xml to csv for code enforcement
 
 import (
 	"flag"
@@ -9,12 +11,15 @@ import (
 	"os"
 )
 
+
+// Function that checks for errors.
 func check(e error) {
 	if e != nil {
 		log.Fatal(e)
 	}
 }
 
+// Struct for code enforcement case.
 type CeCase struct { // Our example struct, you can use "-" to ignore a field
 	ID                       string  `csv:"case_id"`
 	APN                      string  `csv:"apn"`
@@ -39,12 +44,14 @@ type CeCase struct { // Our example struct, you can use "-" to ignore a field
 	RemedyMsg                string  `csv:"remedy_msg"`
 }
 
-type CeComplaint struct { // Our example struct, you can use "-" to ignore a field
+// Complaint Struct
+type CeComplaint struct {
 	CaseID string `csv:"case_id"`
 	TypeID string `csv:"complaint_type_id"`
 	Type   string `csv:"complaint_type"`
 }
 
+// Main function
 func main() {
 	xmlPath := flag.String("xmlPath", "", "xml file path of code enforcement data")
 	ceOutPath := flag.String("ceOutPath", "", "csv file to write cases to")
